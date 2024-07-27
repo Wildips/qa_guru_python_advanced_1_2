@@ -3,7 +3,7 @@ from http import HTTPStatus
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
-
+from fastapi_pagination import Page, add_pagination, paginate
 from models.app_status import AppStatus
 from models.user import User
 
@@ -17,7 +17,7 @@ def status() -> AppStatus:
     return AppStatus(users=bool(users))
 
 
-@app.get("/api/users/{user_id}", status_code=HTTPStatus.OK)
+@app.get("/api/users/{user_id}", status_code=HTTPStatus.OK, response_model=User)
 def user(user_id: int) -> User:
     if user_id < 1:
         raise HTTPException(status_code=HTTPStatus.UNPROCESSABLE_ENTITY, detail="Invalid user id")
@@ -26,10 +26,12 @@ def user(user_id: int) -> User:
     return users[user_id - 1]
 
 
-@app.get("/api/users/", status_code=HTTPStatus.OK, response_model=list[User])
-def users() -> list[User]:
-    return users
+@app.get("/api/users/", status_code=HTTPStatus.OK, response_model=Page[User])
+def users() -> Page[User]:
+    return paginate(users)
 
+
+add_pagination(app)
 
 if __name__ == "__main__":
     with open("users.json") as f:
