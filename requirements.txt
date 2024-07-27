@@ -1,0 +1,9 @@
+pytest
+fastapi~=0.111.1
+email-validator
+python-dotenv
+requests
+pydantic~=2.8.2
+fastapi-pagination
+
+uvicorn~=0.30.3
