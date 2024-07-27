@@ -25,3 +25,20 @@ def test_invalid_page(app_url, page):
 def test_invalid_size(app_url, size):
     response = requests.get(f"{app_url}/api/users/?size={size}&page=1")
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+
+
+@pytest.mark.parametrize("page", [999])
+def test_nonexistent_page(app_url, page):
+    response = requests.get(f"{app_url}/api/users/?size=1&page={page}")
+    assert response.status_code == HTTPStatus.OK
+    assert response.json()["page"] == page
+    assert response.json()["size"] == 1
+    assert response.json()["pages"] == response.json()["total"]
+    assert response.json()["items"] == []
+    assert len(response.json()) == 5
+
+
+@pytest.mark.parametrize("size", [999])
+def test_nonexistent_page(app_url, size):
+    response = requests.get(f"{app_url}/api/users/?size={size}&page=1")
+    assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
