@@ -12,7 +12,7 @@ app = FastAPI()
 users: list[User] = []
 
 
-@app.get("/status/", status_code=HTTPStatus.OK)
+@app.get("/status/", status_code=HTTPStatus.OK, response_model=AppStatus)
 def status() -> AppStatus:
     return AppStatus(users=bool(users))
 
@@ -26,7 +26,7 @@ def user(user_id: int) -> User:
     return users[user_id - 1]
 
 
-@app.get("/api/users/", status_code=HTTPStatus.OK)
+@app.get("/api/users/", status_code=HTTPStatus.OK, response_model=list[User])
 def users() -> list[User]:
     return users
 
