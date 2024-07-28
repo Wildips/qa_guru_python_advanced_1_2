@@ -7,3 +7,7 @@ pydantic~=2.8.2
 fastapi-pagination
 
 uvicorn~=0.30.3
+
+psycopg2-binary
+sqlalchemy
+sqlmodel
