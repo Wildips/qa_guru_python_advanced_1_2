@@ -3,7 +3,7 @@ from http import HTTPStatus
 import pytest
 import requests
 
-from models.user import User
+from models.User import User
 
 
 def test_users(app_url):

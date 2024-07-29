@@ -4,8 +4,8 @@ from http import HTTPStatus
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi_pagination import Page, add_pagination, paginate
-from models.app_status import AppStatus
-from models.user import User
+from models.AppStatus import AppStatus
+from models.User import User
 
 app = FastAPI()
 
