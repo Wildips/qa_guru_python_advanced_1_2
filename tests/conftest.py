@@ -13,7 +13,7 @@ def envs():
 
 @pytest.fixture
 def app_url():
-    return os.getenv("APP_URL")
+    return f"http://{os.getenv("APP_URL")}:{os.getenv("APP_PORT")}"
 
 
 @pytest.fixture

@@ -1,3 +1,9 @@
+import dotenv
+
+dotenv.load_dotenv()
+
+import os
+
 import json
 from http import HTTPStatus
 
@@ -42,4 +48,4 @@ if __name__ == "__main__":
 
     print("Users loaded")
 
-    uvicorn.run(app, host="localhost", port=8002)
+    uvicorn.run(app, host=os.getenv("APP_URL"), port=int(os.getenv("APP_PORT")))

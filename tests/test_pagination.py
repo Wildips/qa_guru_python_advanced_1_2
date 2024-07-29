@@ -3,6 +3,8 @@ from http import HTTPStatus
 import pytest
 import requests
 
+from tests.utils import pages_count
+
 
 @pytest.mark.parametrize("page, size", [(12, 1), (1, 12), (6, 2), (2, 6)])
 def test_users_pagination(app_url, page, size):
@@ -32,9 +34,9 @@ def test_users_pagination_size(app_url, users):
     response = requests.get(f"{app_url}/api/users/?size={size}&page={page}")
     assert response.status_code == HTTPStatus.OK
     assert response.json()["total"] == len(users["items"])
-    assert response.json()["page"] == 1 if int(len(users["items"]) // size) == 0 else int(len(users["items"]) // size)
+    assert response.json()["page"] == pages_count(len(users["items"]), size)
     assert response.json()["size"] == size
-    assert response.json()["pages"] == 1 if int(len(users["items"]) // size) == 0 else int(len(users["items"]) // size)
+    assert response.json()["pages"] == pages_count(len(users["items"]), size)
     assert len(response.json()) == 5
 
 
@@ -75,4 +77,4 @@ def test_different_results_on_different_pages(app_url, users):
     page = 1
     first_page_response = requests.get(f"{app_url}/api/users/?size={size}&page={page}")
     second_page_response = requests.get(f"{app_url}/api/users/?size={size}&page={page + 1}")
-    assert first_page_response != second_page_response
+    assert first_page_response.json()["items"] != second_page_response.json()["items"]
