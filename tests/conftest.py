@@ -1,5 +1,7 @@
 import os
+from http import HTTPStatus
 
+import requests
 import dotenv
 import pytest
 
@@ -11,4 +13,11 @@ def envs():
 
 @pytest.fixture
 def app_url():
-    return os.getenv("APP_URL")
+    return f"http://{os.getenv("APP_URL")}:{os.getenv("APP_PORT")}"
+
+
+@pytest.fixture
+def users(app_url):
+    response = requests.get(f"{app_url}/api/users/")
+    assert response.status_code == HTTPStatus.OK
+    return response.json()

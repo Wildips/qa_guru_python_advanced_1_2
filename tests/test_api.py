@@ -3,7 +3,7 @@ from http import HTTPStatus
 import pytest
 import requests
 
-from models.user import User
+from models.User import User
 
 
 def test_users(app_url):
@@ -11,7 +11,7 @@ def test_users(app_url):
     assert response.status_code == HTTPStatus.OK
 
     users = response.json()
-    for user in users:
+    for user in users["items"]:
         User.model_validate(user)
 
 
@@ -36,13 +36,6 @@ def test_user_invalid_values(app_url, user_id):
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
 
 
-@pytest.fixture
-def users(app_url):
-    response = requests.get(f"{app_url}/api/users/")
-    assert response.status_code == HTTPStatus.OK
-    return response.json()
-
-
 def test_users_no_duplicates(users):
-    users_ids = [user["id"] for user in users]
+    users_ids = [user["id"] for user in users["items"]]
     assert len(users_ids) == len(set(users_ids))
